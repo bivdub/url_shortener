@@ -34,7 +34,7 @@ app.post('/create', function (req, res) {
 
 app.get('/:hash', function (req, res) {
 	db.Url.find({where: {hash: req.params.hash} }).done(function (error, data) {
-		res.redirect("http://"+data.url);
+		res.redirect(req.headers.host+"/"+data.url);
 	});
 });
 
