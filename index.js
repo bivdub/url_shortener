@@ -15,6 +15,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/create', function (req, res) {
+
 		db.Url.findOrCreate({where: {url: req.body.enteredUrl}}).done(function(error, data, created) {
 		console.log(created);
 		if(created) {
@@ -22,11 +23,11 @@ app.post('/create', function (req, res) {
 			var newHash = hashids.encode(data.id);
 			data.hash = newHash;
 			data.save().done(function (error, data) {
-				res.render('./created', {data: data});
+				res.render('./created', {data: data, host: req.headers.host});
 			})
 		} else {
 		console.log('here3');
-			res.render('./created', {data: data});
+			res.render('./created', {data: data, host: req.headers.host});
 		}
 
 	})
@@ -34,7 +35,7 @@ app.post('/create', function (req, res) {
 
 app.get('/:hash', function (req, res) {
 	db.Url.find({where: {hash: req.params.hash} }).done(function (error, data) {
-		res.redirect(req.headers.host+"/"+data.url);
+		res.redirect("http://"+data.url);
 	});
 });
 
